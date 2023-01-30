@@ -3,23 +3,22 @@
 
 /**
   Section: Included Files
-*/
+ */
 
 #include <stdint.h>
 #include <stdbool.h>
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 
-    extern "C" {
+extern "C"
+{
 
 #endif
 
-
-
 /**
   Section: TMR0 APIs
-*/
-        
+ */
+
 /**
   @Summary
     Timer Interrupt Handler
@@ -28,15 +27,15 @@
     This is a function pointer to the function that will be called during the ISR
 
   @Preconditions
-    Initialize  the TMR0 module with interrupt before calling this isr.
+    Initialize  the TMR0 module with interrupt before calling this ISR.
 
   @Param
     None
 
   @Returns
     None
-*/
-extern void (*tmr0_interrupt_handler)(void);
+ */
+extern void (*tmr0_isr_handler)(void);
 
 /**
   @Summary
@@ -63,12 +62,12 @@ extern void (*tmr0_interrupt_handler)(void);
     main()
     {
         // Initialize TMR0 module
-        TMR0_Initialize();
+        tmr0_init();
 
         // Do something else...
     }
     </code>
-*/
+ */
 void tmr0_init(void);
 
 /**
@@ -93,11 +92,11 @@ void tmr0_init(void);
     // Initialize TMR0 module
 
     // Start TMR0
-    TMR0_StartTimer();
+    tmr0_start();
 
     // Do something else...
     </code>
-*/
+ */
 void tmr0_start(void);
 
 /**
@@ -120,16 +119,17 @@ void tmr0_start(void);
   @Example
     <code>
     // Initialize TMR0 module
+    tmr0_init();
 
     // Start TMR0
-    TMR0_StartTimer();
+    tmr0_start();
 
     // Do something else...
 
     // Stop TMR0;
-    TMR0_StopTimer();
+    tmr0_stop();
     </code>
-*/
+ */
 void tmr0_stop(void);
 
 /**
@@ -140,7 +140,7 @@ void tmr0_stop(void);
     Timer Interrupt Service Routine is called by the Interrupt Manager.
 
   @Preconditions
-    Initialize  the TMR0 module with interrupt before calling this isr.
+    Initialize  the TMR0 module with interrupt before calling this ISR.
 
   @Param
     None
@@ -159,23 +159,23 @@ void tmr0_isr(void);
     This sets the function to be called during the ISR
 
   @Preconditions
-    Initialize  the TMR0 module with interrupt before calling this.
+    Initialize the TMR0 module with interrupt before calling this.
 
   @Param
     Address of function to be set
 
   @Returns
     None
-*/
- void tmr0_set_interrupt_handler(void (* interrupt_handler)(void));
+ */
+void tmr0_set_isr_handler(void (* interrupt_handler)(void));
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 
-    }
+}
 
 #endif
 
 #endif // TMR0_H
 /**
  End of File
-*/
+ */

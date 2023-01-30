@@ -1,21 +1,21 @@
 #include "main.h"
 
-void (*tmr0_interrupt_handler)(void);
+void (*tmr0_isr_handler)(void);
 
-volatile uint8_t timer0_reload_val;
+volatile uint8_t tmr0_reload_val;
 
 void tmr0_init(void)
 {
-    // Set TMR0 to the options selected in the User Interface
+    // Set TMR0 to the options
 
     // TMR0H 0; 
     TMR0H = 0x00;
 
     // TMR0L 131; 
     TMR0L = 0x83;
-	
+
     // Load TMR0 value to the 8-bit reload variable
-    timer0_reload_val = 131;
+    tmr0_reload_val = 31;
 
     // Clear Interrupt flag before enabling the interrupt
     INTCONbits.TMR0IF = 0;
@@ -41,22 +41,22 @@ void tmr0_stop(void)
 
 void tmr0_isr(void)
 {
-
-    // clear the TMR0 interrupt flag
+    // Clear the TMR0 interrupt flag
     INTCONbits.TMR0IF = 0;
 
-    // reload TMR0
-    TMR0L = timer0_reload_val;
+    // Reload TMR0
+    TMR0L = tmr0_reload_val;
 
-    if(tmr0_interrupt_handler)
+    // Check for null
+    if (tmr0_isr_handler)
     {
-        tmr0_interrupt_handler();
+        tmr0_isr_handler();
     }
 
-    // add your TMR0 interrupt custom code
+    // Add your TMR0 interrupt custom code
 }
 
-
-void tmr0_set_interrupt_handler(void (* interrupt_handler)(void)){
-    tmr0_interrupt_handler = interrupt_handler;
+void tmr0_set_isr_handler(void (* isr_handler)(void))
+{
+    tmr0_isr_handler = isr_handler;
 }
