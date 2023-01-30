@@ -1,3 +1,10 @@
+/* 
+ * File:   timer.h
+ * Author: Bahtiyar Bayram
+ * Comments:
+ * Revision history: v0.1
+ */
+
 #ifndef TMR0_H
 #define TMR0_H
 

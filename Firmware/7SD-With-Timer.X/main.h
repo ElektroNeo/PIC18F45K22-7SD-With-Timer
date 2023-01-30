@@ -78,9 +78,13 @@
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 
+#define _XTAL_FREQ 16000000
+
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
 #include "tmr0.h"
+#include "gpio.h"
+#include "sev_seg.h"
 
 // TODO Insert appropriate #include <>
 

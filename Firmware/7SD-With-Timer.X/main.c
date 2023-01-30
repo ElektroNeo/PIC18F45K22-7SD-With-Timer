@@ -7,46 +7,37 @@
 
 
 #include "main.h"
+#include <stdint.h>
 
-void __interrupt() interrupt_manager (void)
+sev_seg_t sev_seg = {
+    .digits[0] = B0,
+    .digits[1] = B1,
+    .digits[2] = B2,
+    .digits[3] = B3,
+    .segments[0] = D0,
+    .segments[1] = D1,
+    .segments[2] = D2,
+    .segments[3] = D3,
+    .segments[4] = D4,
+    .segments[5] = D5,
+    .segments[6] = D6,
+};
+
+void __interrupt() interrupt_manager(void)
 {
-    // interrupt handler
-    if(INTCONbits.TMR0IE == 1 && INTCONbits.TMR0IF == 1)
+    // TMR0 interrupt handler
+    if (INTCONbits.TMR0IE == 1 && INTCONbits.TMR0IF == 1)
     {
+        // Update seven segment display.
+        sev_seg_update(&sev_seg);
+
+        // Clear interrupt flag and reload timer.
         tmr0_isr();
     }
     else
     {
-        //Unhandled Interrupt
+        // Unhandled Interrupt
     }
-}
-
-/* Struct of the gpio_t */
-typedef struct {
-    volatile unsigned char *led_dir;
-    volatile unsigned char *led_port;
-    volatile unsigned char *dig_dir;
-    volatile unsigned char *dig_port;
-    uint8_t pin;
-} seven_seg_t;
-
-void sev_seg_init()
-{
-    /* Initialise pins. */
-    /* Disable analog inputs for the digit pins. */
-    ANSELB &= ~(0b00001111);
-    /* Disable analog inputs for the led segments pins. */
-    ANSELD &= ~(0b11111111);
-    /* Set digit pins as output. */
-    TRISB &= ~(0b00001111);
-    /* Set led segments as output. */
-    TRISD &= ~(0b11111111);
-    /* Reset outputs. */
-    LATB &= ~(0b00001111);
-    LATB &= ~(0b11111111);
-    
-    /* Initialise timer. */
-    
 }
 
 int main(void)
@@ -57,18 +48,30 @@ int main(void)
     OSCCON2 = 0x04;
     // INTSRC disabled; PLLEN disabled; TUN 0; 
     OSCTUNE = 0x00;
-    
-    tmr0_init();
-    sev_seg_init();
-    tmr0_start();
-    
+
+    // Initialise seven segment display.
+    sev_seg_init(&sev_seg);
+
     // Disable Interrupt Priority Vectors (16CXXX Compatibility Mode)
     RCONbits.IPEN = 0;
+    // Enable peripheral interrupts.
     INTCONbits.PEIE = 1;
+    // Enable global interrupt.
     INTCONbits.GIE = 1;
-    
+
+    // Set 7SD with a value n.
+    int16_t n = 50;
+    sev_seg_set(&sev_seg, n);
+
+    int16_t counter = 0;
+
     while (1)
     {
-        
+        counter = 0;
+        n--;
+        // Set 7SD with a new value n.
+        sev_seg_set(&sev_seg, n);
+
+        __delay_ms(10);
     }
 }
