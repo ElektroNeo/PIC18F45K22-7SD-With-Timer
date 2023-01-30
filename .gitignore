@@ -24,3 +24,9 @@ fp-info-cache
 # Exported BOM files
 *.xml
 *.csv
+
+Simulation/Project Backups/
+Hardware/pic18f45k22-7sd-with-timer/pic18f45k22-7sd-with-timer-backups/
+Firmware/7SD-With-Timer.X/dist/default/production/
+Firmware/7SD-With-Timer.X/build/default/production/
+*.workspace
